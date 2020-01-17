@@ -1,4 +1,4 @@
-const setPropsFrom = (config: any, updates: any[]) => {
+export const setPropsFrom = (config: any, updates: any[]) => {
   const { props, from, $set = { updates: [ ...updates, { updated: new Date() } ] } } = config
   for (const i in props) {
     if (from[i] !== undefined && from[i]  !== null) {
@@ -8,7 +8,7 @@ const setPropsFrom = (config: any, updates: any[]) => {
   return { $set } 
 }
 
-const getSchemaProps = (schema: any) => {
+export const getSchemaProps = (schema: any) => {
   const tree = []
   for (const i in schema.tree) {
     tree.push(i)
@@ -16,7 +16,7 @@ const getSchemaProps = (schema: any) => {
   return tree.filter(i => i !== 'id' && i !== '_id' && i !== '__v' && i !== 'created')
 }
 
-const createBodyValidator = (body: any) => {
+export const createBodyValidator = (body: any) => {
   const $set = <any>{};
   for (const key in body) {
     if (body.hasOwnProperty(key)) {
@@ -29,6 +29,7 @@ const createBodyValidator = (body: any) => {
   return $set;
 }
 
-export { 
-  setPropsFrom, getSchemaProps, createBodyValidator
-};
+export const capitalize = (s: string) => {
+  if (typeof s !== 'string') return ''
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}

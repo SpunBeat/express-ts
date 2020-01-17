@@ -29,7 +29,7 @@ app.use(compression())
 CounterRoutes(app);
 ElementRoutes(app);
 ProductRoutes(app);
-Ball(app);
+const ball = new Ball(app);
 Hero(app);
 
 

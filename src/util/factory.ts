@@ -1,7 +1,7 @@
 import { Request, Response, Express } from 'express';
 import { EntityConfiguration, MetaResponse, RouteConfiguration, RouteMethod } from '../../interfaces/project.interfaces'
 import { CounterModel } from '../api/counter/counter.model';
-import { setPropsFrom } from './common';
+import { setPropsFrom, capitalize } from './common';
 import { createEntity } from './entity';
 import { model } from 'mongoose';
 
@@ -14,11 +14,6 @@ export const createMeta = (request: string, success: boolean, data: any) => {
     data
   };
   return response;
-}
-
-const capitalize = (s: string) => {
-  if (typeof s !== 'string') return ''
-  return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
 export const createModel = (app: Express) => (config: any) => {
@@ -37,6 +32,27 @@ export const createModel = (app: Express) => (config: any) => {
     plural: config.plural,
     props: config.props
   })
+
+}
+
+export class FactoryModel {
+
+  modelName = capitalize(this.config.singular)
+
+  ElementSchema = createEntity(this.config.props)
+
+  ElementModel = () => model(this.modelName, this.ElementSchema);
+
+  createExpressFactory = createFactory(this.app);
+
+  constructor(private config: any, private app: Express) {
+    this.createExpressFactory({
+      ref: this.ElementModel(),
+      singular: config.singular,
+      plural: config.plural,
+      props: config.props
+    })
+  }
 
 }
 
